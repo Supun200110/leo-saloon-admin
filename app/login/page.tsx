@@ -5,38 +5,55 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button"
 import { useState } from "react";
 import toast from "react-hot-toast";
+import axios from "axios";
+import api from "@/lib/api";
 
 export default function LoginPage() {
 
-    const [email,setEmail]=useState("")
-    const [password,setPassword]=useState("")
-    
+    async function handleLogin() {
+
+      try{
+        const response = await api.post("/api/auth", {
+            email: email,
+            password: password
+        }
+    )
+        window.location.href = "/dashboard"
+
+      }catch(error){
+        console.log(error)
+      }
+        
+    }
+
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
+
 
     return (
         <div className="h-screen flex justify-center items-center">
             <Card className="w-[400px]">
                 <CardHeader>
-                   <CardTitle className="text-center">Login To Saloon Leo Admin</CardTitle>
+                    <CardTitle className="text-center">Login To Saloon Leo Admin</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <div >
                         <Label className="mb-2">Email</Label>
                         <Input
-                        value={email}
-                        onChange={(e)=>setEmail(e.target.value)}
-                         type="email" placeholder="Enter Your Email"></Input>
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                            type="email" placeholder="Enter Your Email"></Input>
                         <Label className="my-2">Passowrd</Label>
                         <Input
-                        value={password}
-                        onChange={(e)=>setPassword(e.target.value)}
-                         type="password" placeholder="Enter Your Password"></Input>
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            type="password" placeholder="Enter Your Password"></Input>
                         <Button
-                        onClick={
-                            ()=>{
-                                toast.success(email+"    "+ password)
+                            onClick={
+                                handleLogin
                             }
-                        }
-                         className="mt-4 w-full">Login</Button>
+                            className="mt-4 w-full">Login</Button>
                     </div>
                 </CardContent>
             </Card>

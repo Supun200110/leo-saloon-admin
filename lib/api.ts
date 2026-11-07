@@ -1,0 +1,21 @@
+import axios from "axios";
+import { error } from "console";
+import toast from "react-hot-toast";
+
+const api = axios .create(
+    {
+        baseURL:"http://localhost:3000",
+        withCredentials:true
+    }
+)
+api.interceptors.response.use(
+    (response)=>{
+        return response
+    },
+    (error)=>{
+        console.log(error.response)
+        toast.error(error.response?.data?.message || "Something went wrong")
+        return Promise.reject(error)
+    }
+)
+export default api
