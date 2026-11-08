@@ -12,18 +12,22 @@ export default function LoginPage() {
 
     async function handleLogin() {
 
-      try{
-        const response = await api.post("/api/auth", {
-            email: email,
-            password: password
-        }
-    )
-        window.location.href = "/dashboard"
+        try {
+            const response = await api.post("/api/auth", {
+                email: email,
+                password: password
+            }
+            )
+            if (response.data.role == "ADMIN") {
+                window.location.href = "/dashboard"
+            } else {
+                toast.error("You are not authorized to login as admin")
+            }
 
-      }catch(error){
-        console.log(error)
-      }
-        
+        } catch (error) {
+            console.log(error)
+        }
+
     }
 
     const [email, setEmail] = useState("")
