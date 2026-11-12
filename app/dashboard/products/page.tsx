@@ -22,6 +22,9 @@ import {
 import { useEffect, useState } from "react";
 import api from "@/lib/api";
 import { useSearchParams } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+
 
 export default function ProductsPage() {
   const [products, setProducts] = useState([]);
@@ -44,19 +47,51 @@ export default function ProductsPage() {
       })
       .then((res) => {
         setProducts(res.data.products);
-
+        setPagination((prev) => ({
+          ...prev,
+          totalCount: res.data.totalCount ?? res.data.products?.length ?? 0,
+          totalPages: res.data.totalPages ?? 1,
+        }));
       });
   }, []);
 
   return (
     <div className="w-full h-full space-y-6">
+      <div className="w-full flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 px-4 sm:px-6 py-5 bg-white dark:bg-gray-950 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800">
+        {/* Title */}
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Products</h1>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Manage your salon product inventory</p>
+        </div>
+
+        {/* Stats + Action */}
+        <div className="flex flex-wrap items-center gap-3">
+          {/* Total Products */}
+          <div className="flex flex-col items-center justify-center px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 min-w-[100px]">
+            <span className="text-xs text-gray-500 dark:text-gray-400 font-medium whitespace-nowrap">Total Products</span>
+            <span className="text-lg font-bold text-gray-900 dark:text-white leading-tight">{pagination.totalCount}</span>
+          </div>
+
+          {/* Current Page */}
+          <div className="flex flex-col items-center justify-center px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 min-w-[100px]">
+            <span className="text-xs text-gray-500 dark:text-gray-400 font-medium whitespace-nowrap">Current Page</span>
+            <span className="text-lg font-bold text-gray-900 dark:text-white leading-tight">
+              {Number(parameters.get("pageNumber") || 1)}/{pagination.totalPages || 1}
+            </span>
+          </div>
+
+          <Link href="/dashboard/products/add-product">
+            <Button className="cursor-pointer whitespace-nowrap">+ Add Product</Button>
+          </Link>
+        </div>
+      </div>
 
       {/* Products Table */}
       <div className="w-full overflow-x-auto rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-950">
         <Table className="min-w-[1100px]">
 
-          <TableCaption className="py-4 text-sm text-gray-500">
-            A list of your salon products.
+          <TableCaption className="py-4 text-sm text-gray-500 ">
+            A list of your salon products. 
           </TableCaption>
 
           <TableHeader>

@@ -6,6 +6,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
+import { ModeToggle } from "@/components/ui/theme.switch";
 
 type DashboardLayoutProps = {
   children: ReactNode;
@@ -37,6 +38,7 @@ export default function DashboardLayout({
           <span className="text-sm font-medium">
             Leo Saloon
           </span>
+          <ModeToggle></ModeToggle>
 
           <span className="ml-auto hidden text-xs text-muted-foreground sm:block">
             Administration
